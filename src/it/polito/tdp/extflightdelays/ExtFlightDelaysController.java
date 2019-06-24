@@ -5,6 +5,7 @@
 package it.polito.tdp.extflightdelays;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import it.polito.tdp.extflightdelays.model.Model;
@@ -47,21 +48,38 @@ public class ExtFlightDelaysController {
 
     @FXML
     void doCreaGrafo(ActionEvent event) {
-
+    	txtResult.clear();
+    	model.creaGrafo();
+    	txtResult.appendText("Grafo creato!");
     }
 
     @FXML
     void doSimula(ActionEvent event) {
+    	if(model.getGrafo()==null) {
+    		txtResult.appendText("ERRORE! Grafo non creato! Creare prima il grafo");
+    	}else {
+        	txtResult.clear();
 
+    	}
     }
 
     @FXML
     void doVisualizzaVelivoli(ActionEvent event) {
-
+    	if(model.getGrafo()==null) {
+    		txtResult.appendText("ERRORE! Grafo non creato! Creare prima il grafo");
+    	}else {
+        	txtResult.clear();
+        	String state = cmbBoxStati.getValue();
+        	List<String> vicini = model.getVicini(state);
+        	for(String s : vicini) {
+        		txtResult.appendText(s+"\n");
+        		}
+    	}
     }
     
     public void setModel(Model model) {
 		this.model = model;	
+		cmbBoxStati.getItems().addAll(model.getStates());
 	}
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
