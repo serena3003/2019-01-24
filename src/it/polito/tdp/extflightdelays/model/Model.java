@@ -19,10 +19,12 @@ public class Model {
 	private List<String> states;
 	private Graph<String, DefaultWeightedEdge> grafo;
 	private Map<Integer, Airport> airportMap; // ordino gli aeroporti per id
+	private Simulazione simulatore;
 
 	public Model() {
 		this.dao = new ExtFlightDelaysDAO();
 		grafo = new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+		simulatore = new Simulazione();
 
 		states = new ArrayList<String>(dao.loadAllStates());
 		// System.out.println(states.size());
@@ -60,14 +62,19 @@ public class Model {
 
 	public List<String> getVicini(String state) {
 		List<String> vicini = new ArrayList<String>();
-		for(DefaultWeightedEdge e : grafo.edgesOf(state)) {
-			if(grafo.getEdgeSource(e).equals(state)) {
+		for(DefaultWeightedEdge e : grafo.outgoingEdgesOf(state)) {
 				String s = grafo.getEdgeWeight(e) + " - " + grafo.getEdgeTarget(e);
 				vicini.add(s);
-			}
 		}
 		Collections.sort(vicini);
 		return vicini;
+	}
+
+	public Map<String, Integer> simula(int t, int g, String state) {
+		
+		simulatore.init(t,g,state, grafo);
+		simulatore.run();
+		return simulatore.getnTuristiPerStato();
 	}
 
 }

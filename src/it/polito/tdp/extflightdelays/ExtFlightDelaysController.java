@@ -6,6 +6,7 @@ package it.polito.tdp.extflightdelays;
 
 import java.net.URL;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import it.polito.tdp.extflightdelays.model.Model;
@@ -59,7 +60,15 @@ public class ExtFlightDelaysController {
     		txtResult.appendText("ERRORE! Grafo non creato! Creare prima il grafo");
     	}else {
         	txtResult.clear();
-
+        	int T = Integer.parseInt(txtT.getText());
+        	int G = Integer.parseInt(txtG.getText());
+        	String state = cmbBoxStati.getValue();
+        	
+        	Map<String, Integer> nTuristi = model.simula(T,G,state);
+        	txtResult.appendText("Risultato simulazione di "+ G+" giorni e " + T+" turisti: \n");
+        	for(String s : nTuristi.keySet()) {
+        		txtResult.appendText(s + " - " + nTuristi.get(s)+"\n");
+        	}
     	}
     }
 
@@ -71,6 +80,7 @@ public class ExtFlightDelaysController {
         	txtResult.clear();
         	String state = cmbBoxStati.getValue();
         	List<String> vicini = model.getVicini(state);
+        	txtResult.appendText("I vicini di " + state + " sono: \n"); 
         	for(String s : vicini) {
         		txtResult.appendText(s+"\n");
         		}
